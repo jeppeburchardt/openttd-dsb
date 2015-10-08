@@ -1,0 +1,39 @@
+// N mark III
+item(FEAT_TRAINS, item_train_engine_n) {
+	
+	property {
+		name: string(ITEM_NAME_N);
+		
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+		introduction_date: 		date(1943, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+		vehicle_life: 			30;
+		reliability_decay: 		20;
+
+		track_type:				RAIL;
+		engine_class:			ENGINE_CLASS_STEAM;
+		running_cost_base:		RUNNING_COST_STEAM;
+		dual_headed:			0;
+		length:					8;
+
+		loading_speed: 			6;
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+		speed: 					110 km/h;
+		power:					1000 hp;
+		weight:					84 ton;
+		air_drag_coefficient: 	0.06;
+		length: 5;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+	}
+
+	graphics {
+		purchase:					set_n_purchase;
+		articulated_part:			sw_n_articulated_part;
+		length:						sw_n_length;
+		default:					sw_n_default;
+		visual_effect_and_powered:	sw_n_visual_effect_and_powered;
+	}
+}

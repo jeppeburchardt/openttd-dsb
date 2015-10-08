@@ -1,0 +1,32 @@
+// N engine
+spriteset(set_n, "gfx/n.png") { tmpl_vehicle_8_views(0, 0) }
+
+// N tender
+spriteset(set_n_tender, "gfx/n.png") { tmpl_vehicle_8_views(1, 0) }
+
+// N purchase
+spriteset(set_n_purchase, "gfx/n.png") { tmpl_vehicle_single(2, 54, 13, -30, -7) }
+
+// default graphics
+switch(FEAT_TRAINS, SELF, sw_n_default, position_in_consist % 2) {
+	1:      set_n_tender;
+    set_n;
+}
+
+// Add tender
+switch(FEAT_TRAINS, SELF, sw_n_articulated_part, extra_callback_info1) {
+	1: return item_train_engine_n;
+    return CB_RESULT_NO_MORE_ARTICULATED_PARTS;
+}
+
+// ajust the length of the tender and engine
+switch(FEAT_TRAINS, SELF, sw_n_length, position_in_vehid_chain % 2) {
+	0: 8;
+	6;
+}
+
+// only add steam effect to engine, not tender
+switch(FEAT_TRAINS, SELF, sw_n_visual_effect_and_powered, position_in_consist % 4) {
+	0: visual_effect_and_powered(VISUAL_EFFECT_STEAM, -1, DISABLE_WAGON_POWER);
+	visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, DISABLE_WAGON_POWER);
+}

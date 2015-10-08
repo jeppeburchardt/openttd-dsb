@@ -1,0 +1,15 @@
+grf {
+	grfid: "DSB\0";
+	name: string(STR_GRF_NAME);
+	desc: string(STR_GRF_DESC);
+	version: 0;
+	min_compatible_version: 0;
+}
+
+railtypetable {
+    RAIL, ELRL, 
+}
+
+cargotable {
+ 	PASS, MAIL, GOOD, COAL
+}

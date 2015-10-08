@@ -1,0 +1,2 @@
+// B sprites
+spriteset(set_b, "gfx/b-ab.png") { tmpl_vehicle_4_views(0) }

@@ -1,0 +1,15 @@
+
+3-PART TRAIN TUTORIAL:
+http://www.tt-wiki.net/wiki/NMLTutorial/Train_three_part_articulated
+
+NML TUTORIAL:
+http://www.tt-wiki.net/wiki/NMLTutorial
+
+PS pallates:
+http://www.tt-wiki.net/wiki/Save_paletted_image_files
+
+NEWGRF Specs:
+http://newgrf-specs.tt-wiki.net/wiki/NML:Vehicles#Road_vehicle_properties
+
+FEATURES:
+http://newgrf-specs.tt-wiki.net/wiki/NML:Features

@@ -1,0 +1,2 @@
+// MZ sprites
+spriteset(set_mz_lighted, "gfx/diesel.png") { tmpl_vehicle_8_views(1, 0) }

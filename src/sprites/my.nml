@@ -1,0 +1,2 @@
+// MY sprites
+spriteset(set_my_lighted, "gfx/diesel.png") { tmpl_vehicle_8_views(0, 0) }

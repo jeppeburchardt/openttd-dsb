@@ -1,0 +1,26 @@
+##grflangid 0x01
+
+# GRF name and description
+STR_GRF_NAME: DSB - Danish Train Set
+STR_GRF_DESC: {RED}DSB Danish Train Set{}{BLACK} By {SILVER} Jeppe Burchardt
+
+
+# engines
+ITEM_NAME_MZ: Class MZ Mk III (Diesel)
+ITEM_NAME_MY: Class MY Mk II (Diesel)
+ITEM_NAME_ME: Class ME (Diesel)
+ITEM_NAME_K: Class K (Steam)
+ITEM_NAME_N: Class N Mk III (Steam)
+
+# sets
+ITEM_NAME_IC3: IC3 Inter City (Diesel)
+
+# wagons
+ITEM_NAME_B: Class B (I)
+ITEM_NAME_AB: Class AB
+ITEM_NAME_FC: Class FC
+ITEM_NAME_CM: Class CM Mk V
+
+# messages
+STR_IC3_CANNOT_START:... train too long (max. 4 coupled EMUs).
+STR_ICM_CANNOT_ATTACH_OTHER  :... only other IC3s can be attached to IC3.

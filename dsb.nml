@@ -1,0 +1,557 @@
+grf {
+	grfid: "DSB\0";
+	name: string(STR_GRF_NAME);
+	desc: string(STR_GRF_DESC);
+	version: 0;
+	min_compatible_version: 0;
+}
+
+railtypetable {
+    RAIL, ELRL, 
+}
+cargotable {
+ 	PASS, MAIL, GOOD, COAL
+}// Basic template for 4 vehicle views
+template tmpl_vehicle_basic(x, y) {
+    // arguments x, y: coordinates of top-left corner of first sprite
+    [x,      y,  8, 24,  -3, -12] //xpos ypos xsize ysize xoff yoff
+    [x +  9, y, 22, 20, -14, -12]
+    [x + 32, y, 32, 16, -16, -12]
+    [x + 65, y, 22, 20,  -6, -12]
+}
+
+// Template for a vehicle with only 4 views (symmetric)
+template tmpl_vehicle_4_views(num) {
+    // argument num: Index in the graphics file, assuming vertical ordering of vehicles
+    tmpl_vehicle_basic(1, 1 + 32 * num)
+}
+
+// Template for a vehicle with 8 views (non-symmetric)
+template tmpl_vehicle_8_views(num, reversed) {
+    // argument num: Index in the graphics file, assuming vertical ordering of vehicles
+    // argument reversed: Reverse visible orientation of vehicle, if set to 1
+    tmpl_vehicle_basic(reversed ? 89 : 1, 1 + 32 * num)
+    tmpl_vehicle_basic(reversed ? 1 : 89, 1 + 32 * num)
+}
+
+// Template for a single vehicle sprite 
+template tmpl_vehicle_single(num, xsize, ysize, xoff, yoff) {
+    [1, 1 + 32 * num, xsize, ysize, xoff, yoff]
+}
+// AB sprites
+spriteset(set_ab, "gfx/b-ab.png") { tmpl_vehicle_8_views(1, 0) }
+// B sprites
+spriteset(set_b, "gfx/b-ab.png") { tmpl_vehicle_4_views(0) }
+// CM sprites
+spriteset(set_cm, "gfx/cm.png") { tmpl_vehicle_4_views(0) }
+
+// CM purchase
+spriteset(set_cm_purchase, "gfx/cm.png") { tmpl_vehicle_single(1, 32, 13, 0, -7) }
+// FC sprites
+spriteset(set_fc, "gfx/fc.png") { tmpl_vehicle_8_views(0, 0) }
+
+// FC purchase
+spriteset(set_fc_purchase, "gfx/fc.png") { tmpl_vehicle_single(1, 27, 14, 0, -7) }
+// MFA
+spriteset(set_mfa, "gfx/ic3.png") { tmpl_vehicle_8_views(0, 0) }
+
+// MFB
+spriteset(set_mfb, "gfx/ic3.png") { tmpl_vehicle_8_views(1, 0) }
+
+// MF
+spriteset(set_ff, "gfx/ic3.png") { tmpl_vehicle_4_views(2) }
+
+// IC3 purchase
+spriteset(set_ic3_purchase, "gfx/ic3.png") { tmpl_vehicle_single(3, 93, 14, -30, -7) }
+
+// IC3 articulated train (MFA-FF-MFB)
+switch(FEAT_TRAINS, SELF, sw_ic3_articulated_part, extra_callback_info1) {
+	1 .. 2: return item_train_engine_ic3;
+    return CB_RESULT_NO_MORE_ARTICULATED_PARTS;
+}
+switch(FEAT_TRAINS, SELF, sw_ic3_start_stop, num_vehs_in_consist) {
+	1 .. 12: return CB_RESULT_NO_TEXT;
+	return string(STR_IC3_CANNOT_START);
+}
+switch(FEAT_TRAINS, SELF, sw_ic3_can_attach_wagon, vehicle_type_id) {
+	item_train_engine_ic3: return CB_RESULT_ATTACH_ALLOW;
+	return string(STR_ICM_CANNOT_ATTACH_OTHER);
+}
+switch(FEAT_TRAINS, SELF, sw_ic3_default, position_in_consist % 3) {
+	0:      set_mfa;
+    2:      set_mfb;
+    set_ff;
+}// K engine
+spriteset(set_k, "gfx/k.png") { tmpl_vehicle_8_views(0, 0) }
+
+// K tender
+spriteset(set_k_tender, "gfx/k.png") { tmpl_vehicle_8_views(1, 0) }
+
+// K purchase
+spriteset(set_k_purchase, "gfx/k.png") { tmpl_vehicle_single(2, 36, 11, -30, -7) }
+
+// default graphics
+switch(FEAT_TRAINS, SELF, sw_k_default, position_in_consist % 2) {
+	1:      set_k_tender;
+    set_k;
+}
+
+// Add tender
+switch(FEAT_TRAINS, SELF, sw_k_articulated_part, extra_callback_info1) {
+	1: return item_train_engine_k;
+    return CB_RESULT_NO_MORE_ARTICULATED_PARTS;
+}
+
+// ajust the length of the tender and engine
+switch(FEAT_TRAINS, SELF, sw_k_length, position_in_vehid_chain % 2) {
+	0: 6;
+	3;
+}
+
+// only add steam effect to engine, not tender
+switch(FEAT_TRAINS, SELF, sw_k_visual_effect_and_powered, position_in_consist % 4) {
+	0: visual_effect_and_powered(VISUAL_EFFECT_STEAM, -1, DISABLE_WAGON_POWER);
+	visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, DISABLE_WAGON_POWER);
+}// ME sprites
+spriteset(set_me_lighted, "gfx/diesel.png") { tmpl_vehicle_8_views(2, 0) }
+// MY sprites
+spriteset(set_my_lighted, "gfx/diesel.png") { tmpl_vehicle_8_views(0, 0) }
+// MZ sprites
+spriteset(set_mz_lighted, "gfx/diesel.png") { tmpl_vehicle_8_views(1, 0) }
+// N engine
+spriteset(set_n, "gfx/n.png") { tmpl_vehicle_8_views(0, 0) }
+
+// N tender
+spriteset(set_n_tender, "gfx/n.png") { tmpl_vehicle_8_views(1, 0) }
+
+// N purchase
+spriteset(set_n_purchase, "gfx/n.png") { tmpl_vehicle_single(2, 54, 13, -30, -7) }
+
+// default graphics
+switch(FEAT_TRAINS, SELF, sw_n_default, position_in_consist % 2) {
+	1:      set_n_tender;
+    set_n;
+}
+
+// Add tender
+switch(FEAT_TRAINS, SELF, sw_n_articulated_part, extra_callback_info1) {
+	1: return item_train_engine_n;
+    return CB_RESULT_NO_MORE_ARTICULATED_PARTS;
+}
+
+// ajust the length of the tender and engine
+switch(FEAT_TRAINS, SELF, sw_n_length, position_in_vehid_chain % 2) {
+	0: 8;
+	6;
+}
+
+// only add steam effect to engine, not tender
+switch(FEAT_TRAINS, SELF, sw_n_visual_effect_and_powered, position_in_consist % 4) {
+	0: visual_effect_and_powered(VISUAL_EFFECT_STEAM, -1, DISABLE_WAGON_POWER);
+	visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, DISABLE_WAGON_POWER);
+}// AB
+item(FEAT_TRAINS, item_wagon_ab) {
+
+	property {
+		name: string(ITEM_NAME_AB);
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+
+        
+		introduction_date: 		date(1983, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+
+		track_type:				RAIL;
+		weight:					37 ton;
+		speed:					160 km/h;
+		default_cargo_type:		PASS;
+		power: 					0 hp;
+		cargo_age_period: 185;
+
+		cargo_capacity:			64;
+		length:					8;
+
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+		tractive_effort_coefficient: 0.3;
+        air_drag_coefficient: 0;
+
+        ai_special_flag: AI_FLAG_PASSENGER;
+        running_cost_base: RUNNING_COST_DIESEL;
+        engine_class: ENGINE_CLASS_DIESEL;
+        visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, DISABLE_WAGON_POWER);
+
+		dual_headed: 0;
+        length: 8;
+        extra_power_per_wagon: 0;
+        bitmask_vehicle_info: 0;
+
+	}
+
+	graphics {
+		default:				set_ab;
+	}
+}
+// B
+item(FEAT_TRAINS, item_wagon_b) {
+
+	property {
+		name: string(ITEM_NAME_B);
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+
+        
+		introduction_date: 		date(1983, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+
+		track_type:				RAIL;
+		weight:					37 ton;
+		speed:					160 km/h;
+		default_cargo_type:		PASS;
+		power: 					0 hp;
+		cargo_age_period: 185;
+
+		cargo_capacity:			64;
+		length:					8;
+
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+		tractive_effort_coefficient: 0.3;
+        air_drag_coefficient: 0;
+
+        ai_special_flag: AI_FLAG_PASSENGER;
+        running_cost_base: RUNNING_COST_DIESEL;
+        engine_class: ENGINE_CLASS_DIESEL;
+        visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, DISABLE_WAGON_POWER);
+
+		dual_headed: 0;
+        length: 8;
+        extra_power_per_wagon: 0;
+        bitmask_vehicle_info: 0;
+
+	}
+
+	graphics {
+		default:				set_b;
+	}
+}
+// FC
+item(FEAT_TRAINS, item_wagon_cm) {
+
+	property {
+		name: string(ITEM_NAME_CM);
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+
+        
+		introduction_date: 		date(1913, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+
+		track_type:				RAIL;
+		weight:					35 ton;
+		speed:					80 km/h;
+		default_cargo_type:		PASS;
+		power: 					0 hp;
+		cargo_age_period: 		185;
+
+		cargo_capacity:			72;
+		length:					8;
+
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+		tractive_effort_coefficient: 0.3;
+        air_drag_coefficient: 0;
+
+        ai_special_flag: AI_FLAG_PASSENGER;
+        running_cost_base: RUNNING_COST_DIESEL;
+        engine_class: ENGINE_CLASS_DIESEL;
+        visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, DISABLE_WAGON_POWER);
+
+		dual_headed: 0;
+        length: 8;
+        extra_power_per_wagon: 0;
+        bitmask_vehicle_info: 0;
+
+	}
+
+	graphics {
+		default:				set_cm;
+		purchase:				set_cm_purchase;
+	}
+}
+// FC
+item(FEAT_TRAINS, item_wagon_fc) {
+
+	property {
+		name: string(ITEM_NAME_FC);
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+
+        
+		introduction_date: 		date(1927, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+
+		track_type:				RAIL;
+		weight:					13 ton;
+		speed:					80 km/h;
+		default_cargo_type:		PASS;
+		power: 					0 hp;
+		cargo_age_period: 		185;
+
+		cargo_capacity:			58;
+		length:					6;
+
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+		tractive_effort_coefficient: 0.3;
+        air_drag_coefficient: 0;
+
+        ai_special_flag: AI_FLAG_PASSENGER;
+        running_cost_base: RUNNING_COST_DIESEL;
+        engine_class: ENGINE_CLASS_DIESEL;
+        visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, DISABLE_WAGON_POWER);
+
+		dual_headed: 0;
+        length: 8;
+        extra_power_per_wagon: 0;
+        bitmask_vehicle_info: 0;
+
+	}
+
+	graphics {
+		default:				set_fc;
+		purchase:				set_fc_purchase;
+	}
+}
+item(FEAT_TRAINS, item_train_engine_ic3) {
+	
+	property {
+		name: string(ITEM_NAME_IC3);
+		
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+		introduction_date: 		date(1968, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+		vehicle_life: 			30;
+		reliability_decay: 		20;
+
+		track_type:				RAIL;
+		engine_class:			ENGINE_CLASS_DIESEL;
+		running_cost_base:		RUNNING_COST_DIESEL;
+		dual_headed:			0;
+		length:					8;
+
+		loading_speed: 			6;
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+		speed: 					180 km/h;
+		power:					1500;
+		weight:					95 ton;
+		air_drag_coefficient: 	0.06;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+
+		visual_effect_and_powered:	visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 2, DISABLE_WAGON_POWER);
+	}
+
+	graphics {
+		purchase:				set_ic3_purchase;
+		articulated_part:		sw_ic3_articulated_part;
+		start_stop:				sw_ic3_start_stop;
+		can_attach_wagon:		sw_ic3_can_attach_wagon;
+		default:				sw_ic3_default;
+	}
+}// K
+item(FEAT_TRAINS, item_train_engine_k) {
+	
+	property {
+		name: string(ITEM_NAME_K);
+		
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+		introduction_date: 		date(1894, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+		vehicle_life: 			30;
+		reliability_decay: 		20;
+
+		track_type:				RAIL;
+		engine_class:			ENGINE_CLASS_STEAM;
+		running_cost_base:		RUNNING_COST_STEAM;
+		dual_headed:			0;
+		length:					8;
+
+		loading_speed: 			6;
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+		speed: 					90 km/h;
+		power:					165;
+		weight:					42 ton;
+		air_drag_coefficient: 	0.06;
+		length: 5;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+	}
+
+	graphics {
+		purchase:					set_k_purchase;
+		articulated_part:			sw_k_articulated_part;
+		length:						sw_k_length;
+		default:					sw_k_default;
+		visual_effect_and_powered:	sw_k_visual_effect_and_powered;
+	}
+}
+// ME
+item(FEAT_TRAINS, item_train_engine_me) {
+	
+	property {
+		name: string(ITEM_NAME_ME);
+		
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+		introduction_date: 		date(1981, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+		vehicle_life: 			30;
+		reliability_decay: 		20;
+
+		track_type:				RAIL;
+		engine_class:			ENGINE_CLASS_DIESEL;
+		running_cost_base:		RUNNING_COST_DIESEL;
+		dual_headed:			0;
+		length:					8;
+
+		loading_speed: 			6;
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+		speed: 					175 km/h;
+		power:					3300;
+		weight:					122 ton;
+		air_drag_coefficient: 	0.06;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+
+		visual_effect_and_powered:	visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 2, DISABLE_WAGON_POWER);
+	}
+
+	graphics {
+		default:				set_me_lighted;
+	}
+}
+// MY
+item(FEAT_TRAINS, item_train_engine_my) {
+	
+	property {
+		name: string(ITEM_NAME_MY);
+		
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+		introduction_date: 		date(1951, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+		vehicle_life: 			30;
+		reliability_decay: 		20;
+
+		track_type:				RAIL;
+		engine_class:			ENGINE_CLASS_DIESEL;
+		running_cost_base:		RUNNING_COST_DIESEL;
+		dual_headed:			0;
+		length:					8;
+
+		loading_speed: 			6;
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+		speed: 					133 km/h;
+		power:					1950;
+		weight:					101 ton;
+		air_drag_coefficient: 	0.06;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+
+		visual_effect_and_powered:	visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 2, DISABLE_WAGON_POWER);
+	}
+
+	graphics {
+		default:				set_my_lighted;
+	}
+}
+// MZ
+item(FEAT_TRAINS, item_train_engine_mz) {
+	
+	property {
+		name: string(ITEM_NAME_MZ);
+		
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+		introduction_date: 		date(1968, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+		vehicle_life: 			30;
+		reliability_decay: 		20;
+
+		track_type:				RAIL;
+		engine_class:			ENGINE_CLASS_DIESEL;
+		running_cost_base:		RUNNING_COST_DIESEL;
+		dual_headed:			0;
+		length:					8;
+
+		loading_speed: 			6;
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+		speed: 					165 km/h;
+		power:					3900;
+		weight:					125 ton;
+		air_drag_coefficient: 	0.06;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+
+		visual_effect_and_powered:	visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 2, DISABLE_WAGON_POWER);
+	}
+
+	graphics {
+		default:				set_mz_lighted;
+	}
+}
+// N mark III
+item(FEAT_TRAINS, item_train_engine_n) {
+	
+	property {
+		name: string(ITEM_NAME_N);
+		
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+		introduction_date: 		date(1943, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+		vehicle_life: 			30;
+		reliability_decay: 		20;
+
+		track_type:				RAIL;
+		engine_class:			ENGINE_CLASS_STEAM;
+		running_cost_base:		RUNNING_COST_STEAM;
+		dual_headed:			0;
+		length:					8;
+
+		loading_speed: 			6;
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+		speed: 					110 km/h;
+		power:					1000 hp;
+		weight:					84 ton;
+		air_drag_coefficient: 	0.06;
+		length: 5;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+	}
+
+	graphics {
+		purchase:					set_n_purchase;
+		articulated_part:			sw_n_articulated_part;
+		length:						sw_n_length;
+		default:					sw_n_default;
+		visual_effect_and_powered:	sw_n_visual_effect_and_powered;
+	}
+}

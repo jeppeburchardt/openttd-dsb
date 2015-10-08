@@ -1,0 +1,39 @@
+item(FEAT_TRAINS, item_train_engine_ic3) {
+	
+	property {
+		name: string(ITEM_NAME_IC3);
+		
+		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
+		introduction_date: 		date(1968, 1, 1);
+		model_life: 			VEHICLE_NEVER_EXPIRES;
+		vehicle_life: 			30;
+		reliability_decay: 		20;
+
+		track_type:				RAIL;
+		engine_class:			ENGINE_CLASS_DIESEL;
+		running_cost_base:		RUNNING_COST_DIESEL;
+		dual_headed:			0;
+		length:					8;
+
+		loading_speed: 			6;
+		cost_factor: 			2;
+		sprite_id: 				SPRITE_ID_NEW_TRAIN;
+		speed: 					180 km/h;
+		power:					1500;
+		weight:					95 ton;
+		air_drag_coefficient: 	0.06;
+
+		extra_weight_per_wagon: 0 ton;
+		bitmask_vehicle_info:   0;
+
+		visual_effect_and_powered:	visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 2, DISABLE_WAGON_POWER);
+	}
+
+	graphics {
+		purchase:				set_ic3_purchase;
+		articulated_part:		sw_ic3_articulated_part;
+		start_stop:				sw_ic3_start_stop;
+		can_attach_wagon:		sw_ic3_can_attach_wagon;
+		default:				sw_ic3_default;
+	}
+}
