@@ -9,9 +9,11 @@ grf {
 railtypetable {
     RAIL, ELRL, 
 }
+
 cargotable {
  	PASS, MAIL, GOOD, COAL
-}// Basic template for 4 vehicle views
+}
+// Basic template for 4 vehicle views
 template tmpl_vehicle_basic(x, y) {
     // arguments x, y: coordinates of top-left corner of first sprite
     [x,      y,  8, 24,  -3, -12] //xpos ypos xsize ysize xoff yoff
@@ -320,7 +322,6 @@ item(FEAT_TRAINS, item_wagon_fc) {
         visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, DISABLE_WAGON_POWER);
 
 		dual_headed: 0;
-        length: 8;
         extra_power_per_wagon: 0;
         bitmask_vehicle_info: 0;
 
