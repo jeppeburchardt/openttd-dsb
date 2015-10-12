@@ -6,6 +6,7 @@ STR_GRF_DESC: {RED}DSB Danish Train Set{}{BLACK} By {SILVER} Jeppe Burchardt
 
 
 # engines
+ITEM_NAME_MO: Class MO (Diesel)
 ITEM_NAME_MZ: Class MZ Mk III (Diesel)
 ITEM_NAME_MY: Class MY Mk II (Diesel)
 ITEM_NAME_ME: Class ME (Diesel)
