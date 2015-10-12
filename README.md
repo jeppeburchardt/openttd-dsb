@@ -6,6 +6,7 @@ Danish (DSB) trainset for OpenTTD
 ## Roadmap
 
 * Diesel
+ * Litra MO 
  * ~~Litra MZ mk III~~
  * ~~Litra MY mk II~~
  * ~~Litra ME~~
