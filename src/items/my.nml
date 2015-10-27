@@ -31,6 +31,6 @@ item(FEAT_TRAINS, item_train_engine_my) {
 	}
 
 	graphics {
-		default:				set_my_lighted;
+		default:				sw_my_graphics;
 	}
 }

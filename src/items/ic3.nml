@@ -4,7 +4,7 @@ item(FEAT_TRAINS, item_train_engine_ic3) {
 		name: string(ITEM_NAME_IC3);
 		
 		climates_available: 	bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL);
-		introduction_date: 		date(1968, 1, 1);
+		introduction_date: 		date(1989, 1, 1);
 		model_life: 			VEHICLE_NEVER_EXPIRES;
 		vehicle_life: 			30;
 		reliability_decay: 		20;
